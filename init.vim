@@ -110,6 +110,8 @@ nnoremap <leader>fg :<C-u>GFiles<cr>
 
 " key-mappings for unite
 nnoremap <leader>b :<c-u>Unite -no-split -buffer-name=buffer buffer<cr>
+nnoremap <leader>ft :<c-u>Unite -no-split -buffer-name=file/tags tag/file<cr>
+nnoremap <leader>t :<c-u>Unite -no-split -buffer-name=tags tag<cr>
 
 let g:python_host_prog = '/home/julian/.pyenv/versions/neovim2/bin/python'
 
