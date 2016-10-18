@@ -6,20 +6,19 @@ set rtp+=~/vimfiles/bundle/Vundle.vim/
 call vundle#begin('~/vimfiles/bundle')
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'Shougo/deoplete.nvim'
+Plugin 'Shougo/unite.vim'
+Plugin 'tsukkee/unite-tag'
 Plugin 'junegunn/fzf.vim'
 Plugin 'junegunn/fzf'
 Plugin 'tagbar'
 Plugin 'vim-airline/vim-airline'
-Plugin 'joshdick/onedark.vim'
-Plugin 'altercation/vim-colors-solarized.git'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
-Plugin 'vim-scripts/AutoFenc'
-Plugin 'Rip-Rip/clang_complete'
+Plugin 'flazz/vim-colorschemes'
 call vundle#end()
 
 filetype plugin indent on
@@ -30,6 +29,10 @@ if has("gui_running")
     set guioptions-=m
     set guioptions-=T
 endif
+
+set termguicolors
+set t_Co=256
+set background=dark
 colo onedark
 
 syntax on
@@ -73,7 +76,6 @@ set wildmode=list:longest,full
 set wildmenu
 
 set dictionary-=/usr/share/dict/words dictionary+=/usr/share/dict/words
-set t_Co=256
 set encoding=utf-8
 
 " undo settings
@@ -105,10 +107,13 @@ nnoremap <leader>t<TAB> :<C-u>IndentGuidesToggle<cr>
 " key-mappings for fzf
 nnoremap <leader>ff :<C-u>Files
 nnoremap <leader>fg :<C-u>GFiles<cr>
-nnoremap <leader>b :<C-u>Buffers<cr>
+
+" key-mappings for unite
+nnoremap <leader>b :<c-u>Unite -no-split -buffer-name=buffer buffer<cr>
 
 let g:python_host_prog = '/home/julian/.pyenv/versions/neovim2/bin/python'
 
 "use deoplete
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources = []
 
