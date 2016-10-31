@@ -7,6 +7,7 @@ call vundle#begin('~/vimfiles/bundle')
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'Shougo/deoplete.nvim'
 Plugin 'Shougo/unite.vim'
+Plugin 'Shougo/vimproc'
 Plugin 'tsukkee/unite-tag'
 Plugin 'junegunn/fzf.vim'
 Plugin 'junegunn/fzf'
@@ -16,12 +17,15 @@ Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
+"Plugin 'SirVer/ultisnips'
+"Plugin 'honza/vim-snippets'
+Plugin 'Shougo/neosnippet'
+Plugin 'Shougo/neosnippet-snippets'
 Plugin 'flazz/vim-colorschemes'
 call vundle#end()
 
-filetype plugin indent on
+filetype plugin on
+filetype indent off
 
 "setting goes here
 if has("gui_running")
@@ -54,11 +58,11 @@ set smartcase
 set expandtab
 set smarttab
 set autoindent
-set copyindent
+"set copyindent
 set shiftround
 set tabstop=4 shiftwidth=4 softtabstop=4
 set foldmethod=indent
-set smartindent
+"set smartindent
 set foldlevel=99
 
 "system related settings
@@ -112,10 +116,21 @@ nnoremap <leader>fg :<C-u>GFiles<cr>
 nnoremap <leader>b :<c-u>Unite -no-split -buffer-name=buffer buffer<cr>
 nnoremap <leader>ft :<c-u>Unite -no-split -buffer-name=file/tags tag/file<cr>
 nnoremap <leader>t :<c-u>Unite -no-split -buffer-name=tags tag<cr>
+nnoremap <leader>g :<c-u>Unite -no-split -buffer-name=grep grep<cr>
+
+if executable('ag')
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+  let g:unite_source_grep_recursive_opt = ''
+endif
+
 
 let g:python_host_prog = '/home/julian/.pyenv/versions/neovim2/bin/python'
 
 "use deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources = []
+
+" enable snipMate compatibility feature
+let g:neosnippet#enable_snipmate_compatibility = 1
 
