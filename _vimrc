@@ -5,26 +5,26 @@ filetype off " required
 set rtp+=~/vimfiles/bundle/Vundle.vim/
 call vundle#begin('~/vimfiles/bundle')
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'Valloric/YouCompleteMe'
 Plugin 'Shougo/unite.vim'
-Plugin 'Shougo/neocomplete.vim'
-Plugin 'Shougo/neomru.vim'
-Plugin 'Shougo/denite.nvim'
-Plugin 'Shougo/vimproc.vim'
+Plugin 'Shougo/vimproc'
+Plugin 'tsukkee/unite-tag'
+Plugin 'junegunn/fzf.vim'
+Plugin 'junegunn/fzf'
 Plugin 'tagbar'
 Plugin 'vim-airline/vim-airline'
-Plugin 'joshdick/onedark.vim'
-Plugin 'altercation/vim-colors-solarized.git'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
-Plugin 'vim-scripts/AutoFenc'
-Plugin 'justmao945/vim-clang'
+"Plugin 'SirVer/ultisnips'
+"Plugin 'honza/vim-snippets'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'sheerun/vim-polyglot'
 call vundle#end()
 
-filetype plugin indent on
+filetype plugin on
+filetype indent off
 
 "setting goes here
 if has("gui_running")
@@ -32,6 +32,10 @@ if has("gui_running")
     set guioptions-=m
     set guioptions-=T
 endif
+
+"set termguicolors
+set t_Co=256
+set background=dark
 colo onedark
 
 syntax on
@@ -53,11 +57,9 @@ set smartcase
 set expandtab
 set smarttab
 set autoindent
-set copyindent
 set shiftround
 set tabstop=4 shiftwidth=4 softtabstop=4
 set foldmethod=indent
-set smartindent
 set foldlevel=99
 
 "system related settings
@@ -68,14 +70,13 @@ set history=1000
 set clipboard=unnamed     
 set backspace=indent,eol,start              " Make backspace behave normally.
 set autowriteall
-"set visualbell
 set modifiable
+
 " wildmenu settings
 set wildmode=list:longest,full
 set wildmenu
 
 set dictionary-=/usr/share/dict/words dictionary+=/usr/share/dict/words
-set t_Co=256
 set encoding=utf-8
 
 " undo settings
@@ -89,55 +90,6 @@ let mapleader=" "
 
 " airline configuration
 set laststatus=2
-
-"neocomplete configuration
-let g:neocomplete#enable_at_startup = 1 "use neocomplete
-let g:neocomplete#enable_smart_case = 1 " use smartcase
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-let g:neocomplete#enable_auto_select = 1
-
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-if !exists('g:neocomplete#force_omni_input_patterns')
-    let g:neocomplete#force_omni_input_patterns = {}
-endif
-
-" disable auto completion for vim-clang
-let g:clang_auto = 0
-" default 'longest' can not work with neocomplete
-let g:clang_c_completeopt = 'menuone,preview'
-let g:clang_cpp_completeopt = 'menuone,preview'
-
-"
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-  " For no inserting <CR> key.
-  "return pumvisible() ? "\<C-y>" : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 
 "Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -153,23 +105,33 @@ nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 nnoremap <leader>t<TAB> :<C-u>IndentGuidesToggle<cr>
 
+" key-mappings for fzf
+nnoremap <leader>ff :<C-u>Files
+nnoremap <leader>fg :<C-u>GFiles<cr>
 
-" unite key-mappings
-nnoremap [unite] <Nop>
-nmap <leader>u [unite]
-nnoremap <silent> [unite]c :<C-u>UniteWithCurrentDir
-            \ -buffer-name=files buffer bookmark file<CR>
+" key-mappings for unite
+nnoremap <leader>b :<c-u>Unite -no-split -buffer-name=buffer buffer<cr>
+nnoremap <leader>ft :<c-u>Unite -no-split -buffer-name=file/tags tag/file<cr>
+nnoremap <leader>t :<c-u>Unite -no-split -buffer-name=tags tag<cr>
+nnoremap <leader>gg :<c-u>Unite -no-split -buffer-name=grep grep<cr>
 
-nnoremap <silent> [unite]f :<C-u>Unite file_rec<cr>
+"key-mappings for youcompleteme
+nnoremap <leader>gd :<c-u>YcmCompleter GoToDeclaration<cr>
+nnoremap <leader>gd :<c-u>YcmCompleter GoToInclude<cr>
 
-nnoremap <silent> [unite]b :<C-u>Unite buffer<cr>
-
-nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search-buffer<cr>
-
-nnoremap <silent> [unite]p :<C-u>Unite file_rec/git<cr>
-if executable('pt')
-    let g:unite_source_grep_command = 'pt'
-    let g:unite_source_grep_default_opts = '--nogroup --nocolor'
-    let g:unite_source_grep_recursive_opt = ''
-    let g:unite_source_grep_encoding = 'utf-8'
+if executable('ag')
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+  let g:unite_source_grep_recursive_opt = ''
 endif
+
+
+"let g:python_host_prog = '~/.pyenv/versions/neovim2/bin/python'
+
+"use deoplete
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources = []
+
+" enable snipMate compatibility feature
+let g:neosnippet#enable_snipmate_compatibility = 1
+
